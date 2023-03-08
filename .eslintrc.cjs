@@ -34,6 +34,15 @@ const config = {
         argsIgnorePattern: "^_",
       },
     ],
+    "indent": ["warn", 2],
+    "linebreak-style": ["error", "unix"],
+    "semi": ["error", "always"],
+    "eol-last": ["error", "always"],
+    "quotes": ["error", "double", {
+      "avoidEscape": true,
+      "allowTemplateLiterals": true
+    }],
+    "jsx-quotes": ["error", "prefer-double"],
   },
 };
 
