@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model owners {
+  id         Int     @id(map: "pk_owners") @default(autoincrement())
+  first_name String? @db.VarChar(30)
+  last_name  String? @db.VarChar(30)
+  address    String? @db.VarChar(255)
+  city       String? @db.VarChar(80)
+  telephone  String? @db.VarChar(20)
+  pets       pets[]
+
+  @@index([last_name], map: "idx_owners_last_name")
+}
+
+model pets {
+  id         Int       @id(map: "pk_pets") @default(autoincrement())
+  name       String?   @db.VarChar(30)
+  birth_date DateTime? @db.Date
+  type_id    Int
+  owner_id   Int
+  owners     owners    @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  types      types     @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  visits     visits[]
+
+  @@index([name], map: "idx_pets_name")
+}
+
+model specialties {
+  id              Int               @id(map: "pk_specialties") @default(autoincrement())
+  name            String?           @db.VarChar(80)
+  vet_specialties vet_specialties[]
+
+  @@index([name], map: "idx_specialties_name")
+}
+
+model types {
+  id   Int     @id(map: "pk_types") @default(autoincrement())
+  name String? @db.VarChar(80)
+  pets pets[]
+
+  @@index([name], map: "idx_types_name")
+}
+
+model vet_specialties {
+  vet_id       Int
+  specialty_id Int
+  specialties  specialties @relation(fields: [specialty_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vets         vets        @relation(fields: [vet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([vet_id, specialty_id], map: "unique_ids")
+}
+
+model vets {
+  id              Int               @id(map: "pk_vets") @default(autoincrement())
+  first_name      String?           @db.VarChar(30)
+  last_name       String?           @db.VarChar(30)
+  vet_specialties vet_specialties[]
+
+  @@index([last_name], map: "idx_vets_last_name")
+}
+
+model visits {
+  id          Int       @id(map: "pk_visits") @default(autoincrement())
+  pet_id      Int
+  visit_date  DateTime? @db.Date
+  description String?   @db.VarChar(255)
+  pets        pets      @relation(fields: [pet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
