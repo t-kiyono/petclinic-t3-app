@@ -26,9 +26,36 @@
   box-sizing: border-box;
 }
 
-body {
-  font-size: 14px;
-  background-color: #f1f1f1;
+@layer base {
+  body {
+    @apply bg-off-white text-sm
+  }
+
+  body,
+  h1,
+  h2,
+  h3,
+  p,
+  input {
+    @apply m-0 font-normal text-gray-dark
+  }
+
+  a {
+    @apply text-green no-underline
+  }
+
+  h2 {
+    @apply text-lg font-bold mb-2.5
+  }
+}
+
+@layer utilities {
+  .-animation-delay-160 {
+    animation-delay: -0.16s;
+  }
+  .-animation-delay-320 {
+    animation-delay: -0.32s;
+  }
 }
 
 body,
@@ -37,22 +64,10 @@ h2,
 h3,
 p,
 input {
-  margin: 0;
-  font-weight: 400;
   font-family: varela_roundregular, sans-serif;
-  color: #34302d;
-}
-
-a {
-  color: #5fa134;
-  text-decoration: none;
 }
 
 h2 {
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 24px;
-  margin-bottom: 10px;
   font-family: montserratregular, sans-serif;
 }
 

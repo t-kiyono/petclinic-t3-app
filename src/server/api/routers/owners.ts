@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -7,15 +8,29 @@ export const ownersRouter = createTRPCRouter({
     .input(z.object({
       lastName: z.string(),
     }))
-    .query(({ input, ctx }) => {
+    .query(async ({ input, ctx }) => {
+      const mapper = (v: Prisma.ownersGetPayload<{ include: { pets: true }}>) => ({
+        id: v.id,
+        name: `${v.first_name ?? ""} ${v.last_name ?? ""}`,
+        address: v.address,
+        city: v.city,
+        telephone: v.telephone,
+        pets: v.pets 
+      });
+
       if (input.lastName.length > 0) {
-        return ctx.prisma.owners.findMany({ where: {
-          last_name: {
-            contains: input.lastName
-          }
-        }});
+        const owners = await ctx.prisma.owners.findMany({
+          include: { pets: true },
+          where: {
+            last_name: {
+              contains: input.lastName,
+            },
+          },
+        });
+        return owners.map(mapper);
       } else {
-        return ctx.prisma.owners.findMany();
+        const owners = await ctx.prisma.owners.findMany({ include: { pets: true }});
+        return owners.map(mapper);
       }
     }),
   create: publicProcedure

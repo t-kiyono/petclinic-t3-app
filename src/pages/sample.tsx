@@ -7,8 +7,8 @@ import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  const owners = api.owners.list.useQuery({ lastName: "" });
-  console.log(owners);
+  const owners = api.owners.list.useQuery({ lastName: "av" });
+  console.log(owners.data);
 
   return (
     <>
