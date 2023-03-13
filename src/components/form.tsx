@@ -34,3 +34,11 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>((props, re
   );
 });
 FormInput.displayName = "FormInput";
+
+export function FormErrorMessage({ children }: PropsWithChildren) {
+  return (
+    <div className="text-red-600">
+      {children}
+    </div>
+  );
+}
