@@ -43,4 +43,22 @@ export const ownersRouter = createTRPCRouter({
       });
       return owner;
     }),
+  show: publicProcedure
+    .input(z.number())
+    .query(async ({ input, ctx }) => {
+      const owner = await ctx.prisma.owners.findUnique({
+        where: {
+          id: input,
+        },
+        include: {
+          pets: {
+            include: {
+              types: true,
+              visits: true,
+            },
+          },
+        },
+      });
+      return owner;
+    })
 });

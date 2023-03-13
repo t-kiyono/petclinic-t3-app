@@ -9,7 +9,7 @@ import { api } from "~/utils/api";
 interface ListOwnersProps {
   lastName?: string;
 }
-const ListOwners: NextPage = ({ lastName }: ListOwnersProps) => {
+const ListOwners: NextPage<ListOwnersProps> = ({ lastName }) => {
   return (
     <Page>
       <CommonMeta />
