@@ -50,6 +50,16 @@ export const ownersRouter = createTRPCRouter({
         where: {
           id: input,
         },
+      });
+      return owner;
+    }),
+  showDetail: publicProcedure
+    .input(z.number())
+    .query(async ({ input, ctx }) => {
+      const owner = await ctx.prisma.owners.findUnique({
+        where: {
+          id: input,
+        },
         include: {
           pets: {
             include: {
@@ -58,6 +68,30 @@ export const ownersRouter = createTRPCRouter({
             },
           },
         },
+      });
+      return owner;
+    }),
+  update: publicProcedure
+    .input(z.object({
+      id: z.number(),
+      firstName: z.string(),
+      lastName: z.string(),
+      address: z.string(),
+      city: z.string(),
+      telephone: z.string(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const owner = await ctx.prisma.owners.update({
+        where: {
+          id: input.id
+        },
+        data: {
+          first_name: input.firstName,
+          last_name: input.lastName,
+          address: input.address,
+          city: input.city,
+          telephone: input.telephone,
+        }
       });
       return owner;
     })

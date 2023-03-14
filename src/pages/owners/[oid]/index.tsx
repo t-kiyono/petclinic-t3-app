@@ -11,53 +11,75 @@ interface ShowOwnerProps {
   oid: number;
 }
 const ShowOwner: NextPage<ShowOwnerProps> = ({ oid }) => {
+  const { data, isLoading } = api.owners.showDetail.useQuery(oid);
+
+  const dataRender = () => {
+    if (isLoading || !data) return <Loader />;
+
+    const owner = {
+      id: data.id,
+      name: `${data.first_name ?? ""} ${data.last_name ?? ""}`,
+      address: data.address ?? "",
+      city: data.city ?? "",
+      telephone: data.telephone ?? "",
+    };
+    const pets = data.pets.map(p => ({
+      id: p.id,
+      name: p.name ?? "",
+      birthDate: p.birth_date ?? undefined,
+      type: p.types.name ?? "",
+      visits: p.visits.map(v => ({
+        id: v.id,
+        visitDate: v.visit_date ?? undefined,
+        description: v.description ?? "",
+      })),
+    }));
+
+    return <ShowData owner={owner} pets={pets} />;
+  };
 
   return (
     <Page>
       <CommonMeta />
       <h2>Owner Information</h2>
-      <ShowData oid={oid} />
+      {dataRender()}
     </Page>
   );
 };
 
 export default ShowOwner;
 
-interface ShowDataProps {
-  oid: number;
+type OwnerInfo = {
+  id: number;
+  name: string;
+  address: string;
+  city: string;
+  telephone: string;
 }
-function ShowData({ oid }: ShowDataProps) {
+type PetsInfo = {
+  id: number;
+  name: string;
+  birthDate?: Date;
+  type: string;
+  visits: {
+    id: number;
+    visitDate?: Date;
+    description: string;
+  }[];
+}[]
+interface ShowDataProps {
+  owner: OwnerInfo;
+  pets: PetsInfo;
+}
+function ShowData({ owner, pets }: ShowDataProps) {
   const router = useRouter();
-  const { data, isLoading } = api.owners.show.useQuery(oid);
-
-  if (isLoading || !data) return <Loader />;
-
-  const owner = {
-    id: data.id,
-    name: `${data.first_name ?? ""} ${data.last_name ?? ""}`,
-    address: data.address ?? "",
-    city: data.city ?? "",
-    telephone: data.telephone ?? "",
-  };
-
-  const pets = data.pets.map(p => ({
-    id: p.id,
-    name: p.name ?? "",
-    birthDate: p.birth_date ?? undefined,
-    type: p.types.name ?? "",
-    visits: p.visits.map(v => ({
-      id: v.id,
-      visitDate: v.visit_date ?? undefined,
-      description: v.description ?? "",
-    })),
-  }));
 
   return (
     <>
       <OwnerInfo owner={owner} />
-      <Button onClick={() => router.push(`/owners/${oid}/edit`)}>Edit Owner</Button>
+      <Button onClick={() => router.push(`/owners/${owner.id}/edit`)}>Edit Owner</Button>
       <div className="ml-1 inline-block">
-        <Button onClick={() => router.push(`/owners/${oid}/pets/new`)}>Add New Pet</Button>
+        <Button onClick={() => router.push(`/owners/${owner.id}/pets/new`)}>Add New Pet</Button>
       </div>
       <div className="mt-10">
         <h2>Pets and Visits</h2>
@@ -68,13 +90,7 @@ function ShowData({ oid }: ShowDataProps) {
 }
 
 interface OwnerInfoProps {
-  owner: {
-    id: number;
-    name: string;
-    address: string;
-    city: string;
-    telephone: string;
-  };
+  owner: OwnerInfo;
 }
 function OwnerInfo({ owner }: OwnerInfoProps) {
   return (
@@ -104,17 +120,7 @@ function OwnerInfo({ owner }: OwnerInfoProps) {
 }
 
 interface PetsInfoProps {
-  pets: {
-    id: number;
-    name: string;
-    birthDate?: Date;
-    type: string;
-    visits: {
-      id: number;
-      visitDate?: Date;
-      description: string;
-    }[],
-  }[];
+  pets: PetsInfo;
 }
 function PetsInfo({ pets }: PetsInfoProps) {
   return (
@@ -191,9 +197,9 @@ function PetsInfo({ pets }: PetsInfoProps) {
 
 export function getServerSideProps({ params }: GetServerSidePropsContext) {
   if (!params) throw new Error("Illegal route params");
+  const oid = parseInt(params.oid as string);
   const props: ShowOwnerProps = {
-    // TODO: zod でバリデーションを追加
-    oid: parseInt(params.oid as string),
+    oid,
   };
   return { props };
 }

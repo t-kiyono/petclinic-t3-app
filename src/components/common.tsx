@@ -19,21 +19,21 @@ export function Page({ children }: PropsWithChildren) {
           <div className="list-none flex flex-row flex-nowrap h-menu-y pr-4">
             <li>
               <Link href="/">
-                <div className={`block text-white text-sm py-7 px-5 uppercase ${"/" === pathname ? "bg-green" : ""}`}>
+                <div className={`block text-white text-sm py-7 px-5 uppercase ${"/" === pathname ? "bg-green" : ""} hover:bg-green`}>
                   <span className="mr-1.5"><FaHome className="inline" /></span>Home
                 </div>
               </Link>
             </li>
             <li>
               <Link href="/owners/find">
-                <div className={`block text-white text-sm py-7 px-5 uppercase ${"/owners/find" === pathname ? "bg-green" : ""}`}>
+                <div className={`block text-white text-sm py-7 px-5 uppercase ${pathname.startsWith("/owners") ? "bg-green" : ""} hover:bg-green`}>
                   <span className="mr-1.5"><FaSearch className="inline" /></span>Find Owners
                 </div>
               </Link>
             </li>
             <li>
               <Link href="/vets">
-                <div className={`block text-white text-sm py-7 px-5 uppercase ${"/vets" === pathname ? "bg-green" : ""}`}>
+                <div className={`block text-white text-sm py-7 px-5 uppercase ${pathname.startsWith("/vets") ? "bg-green" : ""} hover:bg-green`}>
                   <span className="mr-1.5"><FaList className="inline" /></span>Veterinarians
                 </div>
               </Link>

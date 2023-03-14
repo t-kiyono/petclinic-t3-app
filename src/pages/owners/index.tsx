@@ -10,33 +10,46 @@ interface ListOwnersProps {
   lastName?: string;
 }
 const ListOwners: NextPage<ListOwnersProps> = ({ lastName }) => {
+  const { data, isLoading } = api.owners.list.useQuery({ lastName: lastName ?? "" });
+
+  const dataRender = () => {
+    if (isLoading || !data) return <Loader />;
+    const tableData = data.map(d => ({
+      id: d.id,
+      name: `${d.first_name ?? ""} ${d.last_name ?? ""}`,
+      address: d.address ?? "",
+      city: d.city ?? "",
+      telephone: d.telephone ?? "",
+      pets: d.pets.map(p => p.name).join(", "),
+    }));
+    return <ListData data={tableData} />;
+  };
+
   return (
     <Page>
       <CommonMeta />
       <h2>Owners</h2>
-      <ListData lastName={lastName ?? ""} />
+      {dataRender()}
     </Page>
   );
 };
 
 export default ListOwners;
 
-interface ListDataProps {
-  lastName: string;
+type RowData = {
+  id: number;
+  name: string;
+  address: string;
+  city: string;
+  telephone: string;
+  pets: string;
 }
-function ListData({ lastName }: ListDataProps) {
-  const { data, isLoading } = api.owners.list.useQuery({ lastName });
-
-  type TableData = {
-    id: number;
-    name: string;
-    address: string;
-    city: string;
-    telephone: string;
-    pets: string;
-  }
-  const columnHelper = createColumnHelper<TableData>();
-  const columns = useMemo<ColumnDef<TableData, string>[]>(() => [
+interface ListDataProps {
+  data: RowData[];
+}
+function ListData({ data }: ListDataProps) {
+  const columnHelper = createColumnHelper<RowData>();
+  const columns = useMemo<ColumnDef<RowData, string>[]>(() => [
     columnHelper.accessor("name", {
       header: "Name",
       cell: info => (
@@ -61,20 +74,11 @@ function ListData({ lastName }: ListDataProps) {
     }),
   ], [columnHelper]);
 
-  const table = useReactTable<TableData>({
-    data: data?.map(d => ({
-      id: d.id,
-      name: `${d.first_name ?? ""} ${d.last_name ?? ""}`,
-      address: d.address ?? "",
-      city: d.city ?? "",
-      telephone: d.telephone ?? "",
-      pets: d.pets?.map(p => p.name).join(", ") ?? "",
-    })) ?? [],
+  const table = useReactTable<RowData>({
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  if (isLoading || !data) return <Loader />;
 
   return (
     <Table>

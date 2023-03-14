@@ -30,7 +30,7 @@ const AddOwner: NextPage = () => {
 
   const submit = (data: FormValues) => {
     mutation.mutate(data, {
-      onSuccess: (data => router.push(`/owners/${data.id}`)),
+      onSuccess: data => router.push(`/owners/${data.id}`),
     });
   };
 
@@ -42,7 +42,7 @@ const AddOwner: NextPage = () => {
         <FormGroup>
           <FormLabel htmlFor="firstName">First Name</FormLabel>
           <FormItem>
-            <FormInput {...register("firstName", {
+            <FormInput id="firstName" {...register("firstName", {
               required: "This is required",
             })} />
             <FormErrorMessage>
@@ -53,7 +53,7 @@ const AddOwner: NextPage = () => {
         <FormGroup>
           <FormLabel htmlFor="lastName">Last Name</FormLabel>
           <FormItem>
-            <FormInput {...register("lastName", {
+            <FormInput id="lastName" {...register("lastName", {
               required: "This is required",
             })} />
             <FormErrorMessage>
@@ -64,7 +64,7 @@ const AddOwner: NextPage = () => {
         <FormGroup>
           <FormLabel htmlFor="address">Address</FormLabel>
           <FormItem>
-            <FormInput {...register("address", {
+            <FormInput id="address" {...register("address", {
               required: "This is required",
             })} />
             <FormErrorMessage>
@@ -75,7 +75,7 @@ const AddOwner: NextPage = () => {
         <FormGroup>
           <FormLabel htmlFor="city">City</FormLabel>
           <FormItem>
-            <FormInput {...register("city", {
+            <FormInput id="city" {...register("city", {
               required: "This is required",
             })} />
             <FormErrorMessage>
@@ -86,7 +86,7 @@ const AddOwner: NextPage = () => {
         <FormGroup>
           <FormLabel htmlFor="telephone">Telephone</FormLabel>
           <FormItem>
-            <FormInput {...register("telephone", {
+            <FormInput id="telephone" {...register("telephone", {
               required: "This is required",
             })} />
             <FormErrorMessage>
