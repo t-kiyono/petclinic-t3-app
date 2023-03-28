@@ -1,19 +1,20 @@
 import type { GetServerSidePropsContext, NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { format } from "date-fns";
 import { CommonMeta, Loader, Page } from "~/components/common";
 import { Table, Tbody } from "~/components/table";
 import { Button } from "~/components/button";
 import { api } from "~/utils/api";
-import { format } from "date-fns";
-import Link from "next/link";
 
 interface ShowOwnerProps {
   oid: number;
 }
 const ShowOwner: NextPage<ShowOwnerProps> = ({ oid }) => {
+  const router = useRouter();
   const { data, isLoading } = api.owners.showDetail.useQuery(oid);
 
-  const dataRender = () => {
+  const ownerRender = () => {
     if (isLoading || !data) return <Loader />;
 
     const owner = {
@@ -23,74 +24,56 @@ const ShowOwner: NextPage<ShowOwnerProps> = ({ oid }) => {
       city: data.city ?? "",
       telephone: data.telephone ?? "",
     };
+
+    return <OwnerInfo owner={owner} />;
+  };
+
+  const petsRender = () => {
+    if (isLoading || !data) return <Loader />;
+
     const pets = data.pets.map(p => ({
       id: p.id,
+      ownerId: oid,
       name: p.name ?? "",
-      birthDate: p.birth_date ?? undefined,
+      birthDate: p.birth_date ?? new Date(),
       type: p.types.name ?? "",
       visits: p.visits.map(v => ({
         id: v.id,
-        visitDate: v.visit_date ?? undefined,
+        visitDate: v.visit_date ?? new Date(),
         description: v.description ?? "",
       })),
     }));
 
-    return <ShowData owner={owner} pets={pets} />;
+    return <PetsInfo pets={pets} />;
   };
 
   return (
     <Page>
       <CommonMeta />
       <h2>Owner Information</h2>
-      {dataRender()}
+      {ownerRender()}
+      <Button onClick={() => router.push(`/owners/${oid}/edit`)}>Edit Owner</Button>
+      <div className="ml-1 inline-block">
+        <Button onClick={() => router.push(`/owners/${oid}/pets/new`)}>Add New Pet</Button>
+      </div>
+      <div className="mt-10">
+        <h2>Pets and Visits</h2>
+        {petsRender()}
+      </div>
     </Page>
   );
 };
 
 export default ShowOwner;
 
-type OwnerInfo = {
-  id: number;
-  name: string;
-  address: string;
-  city: string;
-  telephone: string;
-}
-type PetsInfo = {
-  id: number;
-  name: string;
-  birthDate?: Date;
-  type: string;
-  visits: {
-    id: number;
-    visitDate?: Date;
-    description: string;
-  }[];
-}[]
-interface ShowDataProps {
-  owner: OwnerInfo;
-  pets: PetsInfo;
-}
-function ShowData({ owner, pets }: ShowDataProps) {
-  const router = useRouter();
-
-  return (
-    <>
-      <OwnerInfo owner={owner} />
-      <Button onClick={() => router.push(`/owners/${owner.id}/edit`)}>Edit Owner</Button>
-      <div className="ml-1 inline-block">
-        <Button onClick={() => router.push(`/owners/${owner.id}/pets/new`)}>Add New Pet</Button>
-      </div>
-      <div className="mt-10">
-        <h2>Pets and Visits</h2>
-        <PetsInfo pets={pets} />
-      </div>
-    </>
-  );
-}
-
 interface OwnerInfoProps {
-  owner: OwnerInfo;
+  owner: {
+    id: number;
+    name: string;
+    address: string;
+    city: string;
+    telephone: string;
+  };
 }
 function OwnerInfo({ owner }: OwnerInfoProps) {
   return (
@@ -120,7 +103,18 @@ function OwnerInfo({ owner }: OwnerInfoProps) {
 }
 
 interface PetsInfoProps {
-  pets: PetsInfo;
+  pets: {
+    id: number;
+    ownerId: number;
+    name: string;
+    birthDate: Date;
+    type: string;
+    visits: {
+      id: number;
+      visitDate: Date;
+      description: string;
+    }[];
+  }[];
 }
 function PetsInfo({ pets }: PetsInfoProps) {
   return (
@@ -142,7 +136,7 @@ function PetsInfo({ pets }: PetsInfoProps) {
                   Birth Date
                 </dt>
                 <dd className="ml-44 leading-normal">
-                  {pet.birthDate && format(pet.birthDate, "yyyy-MM-dd")}
+                  {format(pet.birthDate, "yyyy-MM-dd")}
                 </dd>
               </dl>
               <dl className="mt-0 mb-5">
@@ -170,7 +164,7 @@ function PetsInfo({ pets }: PetsInfoProps) {
                   {pet.visits.map(visit => (
                     <tr key={visit.id}>
                       <td className="p-1">
-                        {visit.visitDate && format(visit.visitDate, "yyyy-MM-dd")}
+                        {format(visit.visitDate, "yyyy-MM-dd")}
                       </td>
                       <td className="p-1">
                         {visit.description}
@@ -179,10 +173,10 @@ function PetsInfo({ pets }: PetsInfoProps) {
                   ))}
                   <tr>
                     <td className="p-1">
-                      <Link href={`pets/${pet.id}/edit`}>Edit Pet</Link>
+                      <Link href={`/owners/${pet.ownerId}/pets/${pet.id}/edit`}>Edit Pet</Link>
                     </td>
                     <td className="p-1">
-                      <Link href={`pets/${pet.id}/visits/new`}>Add Visit</Link>
+                      <Link href={`/owners/${pet.ownerId}/pets/${pet.id}/visits/new`}>Add Visit</Link>
                     </td>
                   </tr>
                 </tbody>

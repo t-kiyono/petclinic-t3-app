@@ -10,7 +10,6 @@ const config = {
         "gray": "#555555",
         "gray-light": "#CCCCCC",
         "th": "#3c3834",
-        "odd": "#f9f9f9",
       },
       spacing: {
         "brand-x": "229px",

@@ -1,28 +1,46 @@
-# Create T3 App
+# Petclinic T3 App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+[T3 Stack](https://create.t3.gg/) のチュートリアルとして作成した、サンプルアプリケーション
 
-## What's next? How do I make an app with this?
+題材として [Spring PetClinic](https://spring-petclinic.github.io/) を使用しています
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Setup
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### Install
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+依存ライブラリをインストールします
 
-## Learn More
+```bash
+$ npm install
+```
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Database
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+ローカル環境での動作確認用に、 `docker-compose.yml` を用意しています
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+起動後、データベーススキーマを適用するために、 `prisma migrate deploy` を実行します
 
-## How do I deploy this?
+```bash
+$ docker-compose up -d
+$ npm run db:deploy
+```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Run
+
+開発サーバーを起動して動作確認することができます
+
+```bash
+$ npm run dev
+```
+
+リリースビルドを作って確認したい場合は、以下の手順を実行してください
+
+```bash
+$ npm run build
+$ cp -p .next/standalone/server.js .
+$ node server.js
+```
+
+※ 実際にリリースする場合は、以下を参考に必要なファイルのみを含めたコンテナイメージを作成してリリースします
+
+https://github.com/vercel/next.js/tree/canary/examples/with-docker

@@ -1,20 +1,24 @@
 import type { GetServerSidePropsContext, NextPage } from "next";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 import { useForm } from "react-hook-form";
+import { FormErrorMessage, FormGroup, FormInput, FormItem, FormLabel } from "~/components/form";
 import { Button } from "~/components/button";
 import { CommonMeta, Loader, Page } from "~/components/common";
-import { FormErrorMessage, FormGroup, FormInput, FormItem, FormLabel } from "~/components/form";
 import { api } from "~/utils/api";
 
-interface AddPetProps {
+interface EditPetProps {
   oid: number;
+  pid: number;
 }
-const AddPet: NextPage<AddPetProps> = ({ oid }) => {
-  const { data: ownerData, isLoading } = api.owners.show.useQuery(oid);
+const EditPet: NextPage<EditPetProps> = ({ oid, pid }) => {
+  const { data: ownerData, isLoading: isOwnerLoading } = api.owners.show.useQuery(oid);
+  const { data: petData, isLoading: isPetLoading } = api.pets.show.useQuery(pid);
   const { data: typesData } = api.types.list.useQuery();
 
   const dataRender = () => {
-    if (isLoading || !ownerData) return <Loader />;
+    if (isOwnerLoading || !ownerData) return <Loader />;
+    if (isPetLoading || !petData) return <Loader />;
 
     const owner = {
       id: ownerData.id,
@@ -24,21 +28,27 @@ const AddPet: NextPage<AddPetProps> = ({ oid }) => {
       id: t.id,
       name: t.name ?? "",
     }));
-    return <AddData owner={owner} petTypes={types} />;
+    const pet = {
+      id: petData.id,
+      name: petData.name ?? "",
+      birthDate: petData.birth_date ?? new Date(),
+      typeId: petData.type_id,
+    };
+    return <EditData owner={owner} petTypes={types} pet={pet} />;
   };
 
   return (
     <Page>
       <CommonMeta />
-      <h2>New Pet</h2>
+      <h2>Pet</h2>
       {dataRender()}
     </Page>
   );
 };
 
-export default AddPet;
+export default EditPet;
 
-interface AddDataProps {
+interface EditDataProps {
   owner: {
     id: number;
     name: string;
@@ -47,10 +57,16 @@ interface AddDataProps {
     id: number;
     name: string;
   }[];
+  pet: {
+    id: number;
+    name: string;
+    birthDate: Date;
+    typeId: number;
+  };
 }
-function AddData({ owner, petTypes }: AddDataProps) {
+function EditData({ owner, petTypes, pet }: EditDataProps) {
   const router = useRouter();
-  const mutation = api.pets.create.useMutation();
+  const mutation = api.pets.update.useMutation();
 
   type FormValues = {
     petName: string;
@@ -70,6 +86,7 @@ function AddData({ owner, petTypes }: AddDataProps) {
 
   const submit = (data: FormValues) => {
     mutation.mutate({
+      id: pet.id,
       name: data.petName,
       birthDate: new Date(data.birthDate),
       typeId: parseInt(data.petType),
@@ -90,7 +107,7 @@ function AddData({ owner, petTypes }: AddDataProps) {
       <FormGroup>
         <FormLabel htmlFor="petName">Name</FormLabel>
         <FormItem>
-          <FormInput id="petName" {...register("petName", {
+          <FormInput id="petName" defaultValue={pet.name} {...register("petName", {
             required: "This is required",
           })} />
           <FormErrorMessage>
@@ -101,7 +118,7 @@ function AddData({ owner, petTypes }: AddDataProps) {
       <FormGroup>
         <FormLabel htmlFor="birthDate">Birth Date</FormLabel>
         <FormItem>
-          <FormInput id="birthDate" type="date" {...register("birthDate", {
+          <FormInput id="birthDate" type="date" defaultValue={format(pet.birthDate, "yyyy-MM-dd")} {...register("birthDate", {
             required: "This is required",
           })} />
           <FormErrorMessage>
@@ -112,7 +129,7 @@ function AddData({ owner, petTypes }: AddDataProps) {
       <FormGroup>
         <FormLabel htmlFor="petType">Type</FormLabel>
         <FormItem>
-          <select className="h-9" id="petType" {...register("petType", {
+          <select className="h-9" id="petType" defaultValue={pet.typeId} {...register("petType", {
             required: "This is required",
           })}>
             {
@@ -128,7 +145,7 @@ function AddData({ owner, petTypes }: AddDataProps) {
       </FormGroup>
       <FormGroup reverse>
         <FormItem>
-          <Button type="submit" disabled={isSubmitting}>Add Pet</Button>
+          <Button type="submit" disabled={isSubmitting}>Update Pet</Button>
         </FormItem>
       </FormGroup>
     </form>
@@ -138,8 +155,10 @@ function AddData({ owner, petTypes }: AddDataProps) {
 export function getServerSideProps({ params }: GetServerSidePropsContext) {
   if (!params) throw new Error("Illegal route params");
   const oid = parseInt(params.oid as string);
-  const props: AddPetProps = {
+  const pid = parseInt(params.pid as string);
+  const props: EditPetProps = {
     oid,
+    pid,
   };
   return { props };
 }

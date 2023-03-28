@@ -1,3 +1,4 @@
-export { ownersRouter } from "./owners";
-export { petsRouter } from "./pets";
-export { typesRouter } from "./types";
+export * from "./owners";
+export * from "./pets";
+export * from "./types";
+export * from "./vets";

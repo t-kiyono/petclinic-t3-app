@@ -34,7 +34,7 @@ type TbodyProps = DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTM
 export function Tbody({ children, ...rest }: TbodyProps) {
   return (
     <tbody className="
-      [&>tr:nth-of-type(odd)]:bg-odd
+      [&>tr:nth-of-type(odd)]:bg-white
       [&>tr>th]:border-t
       [&>tr>th]:border-t-solid
       [&>tr>th]:border-t-gray-dark

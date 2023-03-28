@@ -35,16 +35,17 @@ const EditOwner: NextPage<EditOwnerProps> = ({ oid }) => {
   );
 };
 
-type OwnerInfo = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  address: string;
-  city: string;
-  telephone: string;
-}
+export default EditOwner;
+
 interface EditDataProps {
-  owner: OwnerInfo;
+  owner: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    address: string;
+    city: string;
+    telephone: string;
+  };
 }
 function EditData({ owner }: EditDataProps) {
   const mutation = api.owners.update.useMutation();
@@ -139,8 +140,6 @@ function EditData({ owner }: EditDataProps) {
     </form>
   );
 }
-
-export default EditOwner;
 
 export function getServerSideProps({ params }: GetServerSidePropsContext) {
   if (!params) throw new Error("Illegal route params");

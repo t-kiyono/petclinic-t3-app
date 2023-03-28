@@ -1,96 +1,62 @@
-import type { GetServerSidePropsContext, NextPage } from "next";
-import Link from "next/link";
+import type { NextPage } from "next";
 import { useMemo } from "react";
 import { type ColumnDef, createColumnHelper, useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
 import { CommonMeta, Loader, Page } from "~/components/common";
 import { Table, Tbody, Thead } from "~/components/table";
 import { api } from "~/utils/api";
 
-interface ListOwnersProps {
-  lastName?: string;
-}
-const ListOwners: NextPage<ListOwnersProps> = ({ lastName }) => {
-  const { data, isLoading } = api.owners.list.useQuery({ lastName: lastName ?? "" });
+const Vets: NextPage = () => {
+  const { data, isLoading } = api.vets.list.useQuery();
 
   const listRender = () => {
     if (isLoading || !data) return <Loader />;
 
-    const owners = data.map(d => ({
-      id: d.id,
+    const vets = data.map(d => ({
       name: `${d.first_name ?? ""} ${d.last_name ?? ""}`,
-      address: d.address ?? "",
-      city: d.city ?? "",
-      telephone: d.telephone ?? "",
-      pets: d.pets.map(p => ({ name: p.name ?? "" })),
+      specialties: d.vet_specialties.map(vs => vs.specialties.name ?? ""),
     }));
-    return <ListData owners={owners} />;
+
+    return <ListData vets={vets} />;
   };
 
   return (
     <Page>
       <CommonMeta />
-      <h2>Owners</h2>
+      <h2>Veterinarians</h2>
       {listRender()}
     </Page>
   );
 };
 
-export default ListOwners;
+export default Vets;
 
 interface ListDataProps {
-  owners: {
-    id: number;
+  vets: {
     name: string;
-    address: string;
-    city: string;
-    telephone: string;
-    pets: {
-      name: string;
-    }[];
+    specialties: string[];
   }[];
 }
-function ListData({ owners }: ListDataProps) {
+function ListData({ vets }: ListDataProps) {
   type RowData = {
-    id: number;
     name: string;
-    address: string;
-    city: string;
-    telephone: string;
-    pets: string;
+    specialties: string;
   }
+
   const columnHelper = createColumnHelper<RowData>();
   const columns = useMemo<ColumnDef<RowData, string>[]>(() => [
     columnHelper.accessor("name", {
       header: "Name",
-      cell: info => (
-        <Link href={`/owners/${info.row.original.id}`}>{info.getValue()}</Link>
-      ),
-    }),
-    columnHelper.accessor("address", {
-      header: "Address",
       cell: info => info.getValue(),
     }),
-    columnHelper.accessor("city", {
-      header: "City",
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor("telephone", {
-      header: "Telephone",
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor("pets", {
-      header: "Pets",
+    columnHelper.accessor("specialties", {
+      header: "Specialties",
       cell: info => info.getValue(),
     }),
   ], [columnHelper]);
 
-  const tableData: RowData[] = owners.map(o => ({
-    id: o.id,
-    name: o.name,
-    address: o.address,
-    city: o.city,
-    telephone: o.telephone,
-    pets: o.pets.map(p => p.name).join(", "),
+  const tableData: RowData[] = vets.map(v => ({
+    name: v.name,
+    specialties: v.specialties.length > 0 ? v.specialties.join(" ") : "none",
   }));
 
   const table = useReactTable<RowData>({
@@ -131,11 +97,4 @@ function ListData({ owners }: ListDataProps) {
       </Tbody>
     </Table>
   );
-}
-
-export function getServerSideProps({ query }: GetServerSidePropsContext) {
-  const props: ListOwnersProps = {
-    lastName: query.lastName as string ?? ""
-  };
-  return { props };
 }
