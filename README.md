@@ -14,15 +14,24 @@
 $ npm install
 ```
 
+環境変数の設定ファイルを配置します
+
+```bash
+$ cp -p .env.example .env
+```
+
 ### Database
 
 ローカル環境での動作確認用に、 `docker-compose.yml` を用意しています
 
-起動後、データベーススキーマを適用するために、 `prisma migrate deploy` を実行します
+起動後、データベーススキーマを適用するために、 `prisma migrate deploy` を実行してください
+
+その後、初期データを投入します
 
 ```bash
 $ docker-compose up -d
 $ npm run db:deploy
+$ npm run db:seed
 ```
 
 ## Run
