@@ -1,0 +1,17 @@
+Dockerfile
+docker-compose.yml
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+docs
+coverage
+.next
+.swc
+.git
+.github
+.editorconfig
+.env*
+.eslintrc.cjs
+.gitignore
+.vscode
