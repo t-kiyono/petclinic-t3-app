@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: azure
-      url: petclinic-t3.azurewebsites.net
+      url: https://petclinic-t3.azurewebsites.net/
     env:
       REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
       USERNAME: ${{ secrets.REGISTRY_USERNAME }}
