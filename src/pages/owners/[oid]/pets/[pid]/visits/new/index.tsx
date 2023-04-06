@@ -15,7 +15,7 @@ interface AddVisitProps {
 }
 const AddVisit: NextPage<AddVisitProps> = ({ pid }) => {
   const { data: petData, isLoading: isPetLoading } = api.pets.showDetail.useQuery(pid);
-  const { data: visitsData, isLoading: isVisitsLoading } = api.visits.list.useQuery();
+  const { data: visitsData, isLoading: isVisitsLoading } = api.visits.listByPetId.useQuery(pid);
 
   const addDataRender = () => {
     if (isPetLoading || !petData) return <Loader />;

@@ -19,9 +19,14 @@ export const visitsRouter = createTRPCRouter({
       });
       return visit;
     }),
-  list: publicProcedure
-    .query(async ({ ctx }) => {
-      const visits = await ctx.prisma.visits.findMany();
+  listByPetId: publicProcedure
+    .input(z.number())
+    .query(async ({ input, ctx }) => {
+      const visits = await ctx.prisma.visits.findMany({
+        where: {
+          pet_id: input,
+        }
+      });
       return visits;
     })
 });
