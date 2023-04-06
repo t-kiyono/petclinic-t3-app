@@ -13,6 +13,7 @@ const Home: NextPage = () => {
         height={170}
         alt="Pets"
       />
+      <p>test</p>
     </Page>
   );
 };
