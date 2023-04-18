@@ -1,137 +1,43 @@
 import type { GetServerSidePropsContext, NextPage } from "next";
-import Link from "next/link";
-import { useMemo } from "react";
-import { type ColumnDef, createColumnHelper, useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
 import { CommonMeta, Loader, Page } from "~/components/common";
-import { Table, Tbody, Thead } from "~/components/table";
+import { OwnersTable } from "~/components/owner";
 import { api } from "~/utils/api";
 
 interface ListOwnersProps {
   lastName?: string;
 }
 const ListOwners: NextPage<ListOwnersProps> = ({ lastName }) => {
-  const { data, isLoading } = api.owners.list.useQuery({ lastName: lastName ?? "" });
-
-  const listRender = () => {
-    if (isLoading || !data) return <Loader />;
-
-    const owners = data.map(d => ({
-      id: d.id,
-      name: `${d.first_name ?? ""} ${d.last_name ?? ""}`,
-      address: d.address ?? "",
-      city: d.city ?? "",
-      telephone: d.telephone ?? "",
-      pets: d.pets.map(p => ({ name: p.name ?? "" })),
-    }));
-    return <ListData owners={owners} />;
-  };
-
   return (
     <Page>
       <CommonMeta />
       <h2>Owners</h2>
-      {listRender()}
+      <OwnersData lastName={lastName ?? ""} />
     </Page>
   );
 };
 
 export default ListOwners;
 
-interface ListDataProps {
-  owners: {
-    id: number;
-    name: string;
-    address: string;
-    city: string;
-    telephone: string;
-    pets: {
-      name: string;
-    }[];
-  }[];
+interface OwnersDataProps {
+  lastName: string;
 }
-function ListData({ owners }: ListDataProps) {
-  type RowData = {
-    id: number;
-    name: string;
-    address: string;
-    city: string;
-    telephone: string;
-    pets: string;
-  }
-  const columnHelper = createColumnHelper<RowData>();
-  const columns = useMemo<ColumnDef<RowData, string>[]>(() => [
-    columnHelper.accessor("name", {
-      header: "Name",
-      cell: info => (
-        <Link href={`/owners/${info.row.original.id}`}>{info.getValue()}</Link>
-      ),
-    }),
-    columnHelper.accessor("address", {
-      header: "Address",
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor("city", {
-      header: "City",
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor("telephone", {
-      header: "Telephone",
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor("pets", {
-      header: "Pets",
-      cell: info => info.getValue(),
-    }),
-  ], [columnHelper]);
+function OwnersData({ lastName }: OwnersDataProps) {
+  const { data, isLoading } = api.owners.list.useQuery({ lastName });
 
-  const tableData: RowData[] = owners.map(o => ({
-    id: o.id,
-    name: o.name,
-    address: o.address,
-    city: o.city,
-    telephone: o.telephone,
-    pets: o.pets.map(p => p.name).join(", "),
+  if (isLoading || !data) return <Loader />;
+
+  const tableData = data.map(d => ({
+    id: d.id,
+    name: `${d.first_name ?? ""} ${d.last_name ?? ""}`,
+    address: d.address ?? "",
+    city: d.city ?? "",
+    telephone: d.telephone ?? "",
+    pets: d.pets.map(p => p.name ?? "").join(", "),
   }));
 
-  const table = useReactTable<RowData>({
-    data: tableData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
-  return (
-    <Table>
-      <Thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id}>
-                {flexRender(
-                  header.column.columnDef.header,
-                  header.getContext()
-                )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </Thead>
-      <Tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>
-                {flexRender(
-                  cell.column.columnDef.cell,
-                  cell.getContext()
-                )}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </Tbody>
-    </Table>
-  );
+  return <OwnersTable data={tableData} />;
 }
+
 
 export function getServerSideProps({ query }: GetServerSidePropsContext) {
   const props: ListOwnersProps = {

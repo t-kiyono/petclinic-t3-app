@@ -16,10 +16,18 @@ export const ownersRouter = createTRPCRouter({
               contains: input.lastName,
             },
           },
+          orderBy: {
+            id: "asc",
+          },
         });
         return owners;
       } else {
-        const owners = await ctx.prisma.owners.findMany({ include: { pets: true }});
+        const owners = await ctx.prisma.owners.findMany({
+          include: { pets: true },
+          orderBy: {
+            id: "asc",
+          },
+        });
         return owners;
       }
     }),
@@ -66,6 +74,9 @@ export const ownersRouter = createTRPCRouter({
               types: true,
               visits: true,
             },
+            orderBy: {
+              id: "asc",
+            }
           },
         },
       });

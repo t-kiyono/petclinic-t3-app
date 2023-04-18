@@ -1,4 +1,4 @@
-import type { DetailedHTMLProps, InputHTMLAttributes, LabelHTMLAttributes, PropsWithChildren } from "react";
+import type { DetailedHTMLProps, InputHTMLAttributes, LabelHTMLAttributes, PropsWithChildren, SelectHTMLAttributes } from "react";
 import { forwardRef } from "react";
 
 export function FormGroup({ children, reverse }: PropsWithChildren<{reverse?: boolean}>) {
@@ -34,6 +34,17 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>((props, re
   );
 });
 FormInput.displayName = "FormInput";
+
+type FormSelectProps = DetailedHTMLProps<SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
+export const FormSelect = forwardRef<HTMLSelectElement, FormSelectProps>((props, ref) => {
+  const { children, ...rest } = props;
+  return (
+    <select ref={ref} className="h-9 border-solid border border-gray-light" {...rest}>
+      {children}
+    </select>
+  );
+});
+FormSelect.displayName = "FormSelect";
 
 export function FormErrorMessage({ children }: PropsWithChildren) {
   return (
