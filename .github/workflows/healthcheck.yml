@@ -2,7 +2,7 @@ name: Health Check
 
 on:
   schedule:
-    - cron: '* 11 * * 5'
+    - cron: '0 11 * * *'
   workflow_dispatch:
 
 jobs:
