@@ -7,6 +7,6 @@ export default async function health(
   _req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await prisma.$queryRaw`SELECT 1`;
+  await prisma.$queryRaw`SELECT * FROM owners`;
   res.status(200).json({ status: "ok" });
 }
