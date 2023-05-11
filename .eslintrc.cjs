@@ -52,6 +52,9 @@ const config = {
     }],
     "jsx-quotes": ["error", "prefer-double"],
   },
+  "ignorePatterns": [
+    "tailwind.config.cjs"
+  ],
 };
 
 module.exports = config;

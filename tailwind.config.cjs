@@ -1,16 +1,11 @@
+const colors = require("./src/styles/colors");
+
 /** @type {import('tailwindcss').Config} */
 const config = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      colors: {
-        "off-white": "#f1f1f1",
-        "green": "#6db33f",
-        "gray-dark": "#34302D",
-        "gray": "#555555",
-        "gray-light": "#CCCCCC",
-        "th": "#3c3834",
-      },
+      colors,
       spacing: {
         "brand-x": "229px",
         "brand-y": "46px",
