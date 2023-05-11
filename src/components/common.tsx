@@ -9,7 +9,7 @@ export function Page({ children }: PropsWithChildren) {
 
   return (
     <>
-      <div className="bg-gray-dark border-t-4 border-solid border-green">
+      <div className="bg-gray-dark">
         <div className="flex flex-row flex-nowrap justify-between mx-auto w-3/5">
           <Link href="/">
             <div className="group w-brand-x h-brand-y inline-block mt-3 mx-0 mb-1.5" style={{ background: "url(/images/spring-logo-dataflow.png) -1px -1px no-repeat" }}>
