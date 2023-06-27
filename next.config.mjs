@@ -10,6 +10,9 @@
 const config = {
   reactStrictMode: true,
   output: "standalone",
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
 
   /**
    * If you have the "experimental: { appDir: true }" setting enabled, then you
