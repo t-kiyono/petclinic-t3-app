@@ -1,29 +1,37 @@
-import type { NextPage } from "next";
-import { CommonMeta, Loader, Page } from "~/components/common";
+import type { GetServerSidePropsContext, NextPage } from "next";
+import { appRouter } from "~/server/api/root";
+import { CommonMeta, Page } from "~/components/common";
 import { VetsTable } from "~/components/vets";
-import { api } from "~/utils/api";
+import { createInnerTRPCContext } from "~/server/api/trpc";
 
-const Vets: NextPage = () => {
+type Props = {
+  tableData: Array<{
+    name: string;
+    specialties: string;
+  }>
+}
+const Vets: NextPage<Props> = ({ tableData }) => {
   return (
     <Page>
       <CommonMeta />
       <h2>Veterinarians</h2>
-      <VetsData />
+      <VetsTable data={tableData} />
     </Page>
   );
 };
 
 export default Vets;
 
-function VetsData() {
-  const { data, isLoading } = api.vets.list.useQuery();
+export async function getServerSideProps(_ctx: GetServerSidePropsContext) {
+  const trpc = appRouter.createCaller(createInnerTRPCContext({}));
+  const data = await trpc.vets.list();
 
-  if (isLoading || !data) return <Loader />;
-
-  const tableData = data.map(d => ({
-    name: `${d.first_name ?? ""} ${d.last_name ?? ""}`,
-    specialties: d.vet_specialties.map(vs => vs.specialties.name ?? "").join(" ")
-  }));
-
-  return <VetsTable data={tableData} />;
+  return {
+    props: {
+      tableData: data.map(d => ({
+        name: `${d.first_name ?? ""} ${d.last_name ?? ""}`,
+        specialties: d.vet_specialties.map(vs => vs.specialties.name ?? "").join(" ")
+      }))
+    }
+  };
 }

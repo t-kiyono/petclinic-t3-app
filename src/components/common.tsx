@@ -12,8 +12,8 @@ export function Page({ children }: PropsWithChildren) {
       <div className="bg-gray-dark">
         <div className="flex flex-row flex-nowrap justify-between mx-auto w-3/5">
           <Link href="/">
-            <div className="group w-brand-x h-brand-y inline-block mt-3 mx-0 mb-1.5" style={{ background: "url(/images/spring-logo-dataflow.png) -1px -1px no-repeat" }}>
-              <span className="w-brand-x h-brand-y block opacity-0 group-hover:opacity-100" style={{ background: "url(/images/spring-logo-dataflow.png) -1px -48px no-repeat" }} />
+            <div className="group w-brand-x h-brand-y inline-block mt-3 mx-0 mb-1.5" style={{ background: "url(/images/spring-logo-dataflow.webp) -1px -1px no-repeat" }}>
+              <span className="w-brand-x h-brand-y block opacity-0 group-hover:opacity-100" style={{ background: "url(/images/spring-logo-dataflow.webp) -1px -48px no-repeat" }} />
             </div>
           </Link>
           <div className="list-none flex flex-row flex-nowrap h-menu-y pr-4">
@@ -56,7 +56,7 @@ export function CommonMeta({ title = "Petclinic", description = "This is Petclin
       <meta property="description" content={description} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <link rel="icon" type="image/png" href="/favicon.png" />
+      <link rel="icon" type="image/webp" href="/favicon.webp" />
     </Head>
   );
 }
