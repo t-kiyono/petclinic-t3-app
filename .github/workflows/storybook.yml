@@ -3,6 +3,7 @@ name: Release Storybook to GitHub Pages
 on:
   push:
     paths:
+      - ".github/workflows/storybook.yml"
       - "src/stories/**"
     branches:
       - main
@@ -12,6 +13,10 @@ env:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
