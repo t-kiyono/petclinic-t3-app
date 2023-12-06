@@ -12,6 +12,7 @@ const Home: NextPage = () => {
         width={239}
         height={170}
         alt="Pets"
+        loading="eager"
       />
     </Page>
   );
