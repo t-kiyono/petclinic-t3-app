@@ -7,6 +7,15 @@
 }
 
 @layer base {
+  :root {
+    --color-off-white: 241 241 241;
+    --color-green: 109 179 63;
+    --color-gray-dark: 52 48 45;
+    --color-gray: 85 85 85;
+    --color-gray-light: 204 204 204;
+    --color-th: 60 56 52;
+  }
+
   body {
     @apply bg-off-white text-sm
   }

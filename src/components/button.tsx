@@ -1,10 +1,10 @@
 import type { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
 
 type ButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
-export function Button({ children, ...rect }: ButtonProps) {
+export function Button({ children, className, ...rect }: ButtonProps) {
   return (
     <button
-      className="
+      className={`
         inline-block
         mb-0
         font-normal
@@ -22,7 +22,8 @@ export function Button({ children, ...rect }: ButtonProps) {
         text-white
         bg-gray-dark
         border-green
-      "
+        ${className}
+      `}
       {...rect}
     >
       {children}

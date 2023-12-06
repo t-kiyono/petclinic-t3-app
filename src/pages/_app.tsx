@@ -2,7 +2,6 @@ import { type AppType } from "next/app";
 import NextNProgress from "nextjs-progressbar";
 
 import { api } from "~/utils/api";
-import colors from "~/styles/colors";
 
 import "~/styles/globals.css";
 
@@ -38,7 +37,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           font-family: ${montserrat.style.fontFamily}, sans-serif;
         }
       `}</style>
-      <NextNProgress color={colors.green} options={{ showSpinner: false }}/>
+      <NextNProgress color="rgb(var(--color-green))" options={{ showSpinner: false }}/>
       <Component {...pageProps} />
     </>
   );

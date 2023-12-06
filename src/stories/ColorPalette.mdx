@@ -1,0 +1,26 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+
+<Meta title="Colors" />
+
+<ColorPalette>
+  <ColorItem
+    title="Off-White"
+    colors={{ 'off-white': 'rgb(var(--color-off-white))' }}
+  />
+  <ColorItem
+    title="Green"
+    colors={{ green: 'rgb(var(--color-green))' }}
+  />
+  <ColorItem
+    title="Gray"
+    colors={{
+      dark: 'rgb(var(--color-gray-dark))',
+      medium: 'rgb(var(--color-gray))',
+      light: 'rgb(var(--color-gray-light))',
+    }}
+  />
+  <ColorItem
+    title="Table-Header"
+    colors={{ th: 'rgb(var(--color-th))' }}
+  />
+</ColorPalette>

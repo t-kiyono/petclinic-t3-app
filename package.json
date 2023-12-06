@@ -12,7 +12,9 @@
     "db:push": "prisma migrate db push",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "test": "vitest run"
+    "test": "vitest run",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@prisma/client": "^4.9.0",
@@ -33,6 +35,14 @@
     "zod": "^3.20.6"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^7.6.3",
+    "@storybook/addon-interactions": "^7.6.3",
+    "@storybook/addon-links": "^7.6.3",
+    "@storybook/addon-onboarding": "^1.0.9",
+    "@storybook/blocks": "^7.6.3",
+    "@storybook/nextjs": "^7.6.3",
+    "@storybook/react": "^7.6.3",
+    "@storybook/test": "^7.6.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
@@ -47,12 +57,14 @@
     "autoprefixer": "^10.4.7",
     "eslint": "^8.34.0",
     "eslint-config-next": "^13.2.1",
+    "eslint-plugin-storybook": "^0.6.15",
     "jsdom": "^22.1.0",
     "postcss": "^8.4.14",
     "prettier": "^2.8.1",
     "prettier-plugin-tailwindcss": "^0.2.1",
     "prisma": "^4.9.0",
     "sharp": "^0.32.0",
+    "storybook": "^7.6.3",
     "tailwindcss": "^3.2.0",
     "typescript": "^4.9.5",
     "vitest": "^0.32.0"
