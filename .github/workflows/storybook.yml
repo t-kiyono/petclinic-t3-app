@@ -6,6 +6,8 @@ on:
       - "src/stories/**"
     branches:
       - main
+env:
+  DATABASE_URL: postgresql://example.com
 
 jobs:
   release:

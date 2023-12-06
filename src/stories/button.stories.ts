@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-import { Button } from '~/components/button';
+import { Button } from "~/components/button";
 
 const meta = {
-  title: 'Button',
+  title: "Button",
   component: Button,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
 } satisfies Meta<typeof Button>;
 
@@ -15,6 +15,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Simple: Story = {
   args: {
-    children: 'Button',
+    children: "Button",
   },
 };

@@ -22,7 +22,7 @@ export function Button({ children, className, ...rect }: ButtonProps) {
         text-white
         bg-gray-dark
         border-green
-        ${className}
+        ${className || ""}
       `}
       {...rect}
     >
