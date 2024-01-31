@@ -7,7 +7,7 @@ import {
   FormItem,
   FormLabel,
   FormSelect
-} from "~/components/form";
+} from "~/components/atoms/form";
 
 const meta = {
   title: "Form",

@@ -1,20 +1,20 @@
 import Link from "next/link";
 import { useMemo } from "react";
-import { type ColumnDef, createColumnHelper, useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
-import { Table, Tbody, Thead } from "~/components/table";
 import { useForm } from "react-hook-form";
-import { Button } from "~/components/button";
-import { FormErrorMessage, FormGroup, FormInput, FormItem, FormLabel } from "~/components/form";
+import { type ColumnDef, createColumnHelper, useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
+import { Button } from "~/components/atoms/button";
+import { FormErrorMessage, FormGroup, FormInput, FormItem, FormLabel } from "~/components/atoms/form";
+import { Table, Tbody, Thead } from "~/components/atoms/table";
 
 /**
  * FindOwnersForm
  */
-export interface FindOwnersFormValues {
+export type FindOwnersFormValues = {
   lastName: string;
-}
-interface FindOwnersFormProps {
+};
+type FindOwnersFormProps = {
   submit: (data: FindOwnersFormValues) => void;
-}
+};
 export function FindOwnersForm({ submit }: FindOwnersFormProps) {
   const {
     register,
@@ -41,17 +41,17 @@ export function FindOwnersForm({ submit }: FindOwnersFormProps) {
 /**
  * OwnersTable
  */
-export interface OwnerRowData {
+export type OwnerRowData = {
   id: number;
   name: string;
   address: string;
   city: string;
   telephone: string;
   pets: string;
-}
-interface OwnersTableProps {
+};
+type OwnersTableProps = {
   data: OwnerRowData[];
-}
+};
 export function OwnersTable({ data }: OwnersTableProps) {
   const columnHelper = createColumnHelper<OwnerRowData>();
   const columns = useMemo<ColumnDef<OwnerRowData, string>[]>(() => [
@@ -122,15 +122,14 @@ export function OwnersTable({ data }: OwnersTableProps) {
 /**
  * OwnerForm
  */
-export interface OwnerFormValues {
+export type OwnerFormValues = {
   firstName: string;
   lastName: string;
   address: string;
   city: string;
   telephone: string;
-}
-
-interface OwnerFormProps {
+};
+type OwnerFormProps = {
   owner?: {
     firstName: string;
     lastName: string;
@@ -140,7 +139,7 @@ interface OwnerFormProps {
   }
   submit: (data: OwnerFormValues) => void;
   type: "ADD" | "UPDATE";
-}
+};
 export function OwnerForm({ owner, submit, type }: OwnerFormProps) {
   const ownerValue = owner ?? {
     firstName: "",
@@ -242,7 +241,7 @@ export function OwnerForm({ owner, submit, type }: OwnerFormProps) {
 /**
  * OwnerTable
  */
-interface OwnerTableProps {
+type OwnerTableProps = {
   owner: {
     id: number;
     name: string;
@@ -250,7 +249,7 @@ interface OwnerTableProps {
     city: string;
     telephone: string;
   };
-}
+};
 export function OwnerTable({ owner }: OwnerTableProps) {
   return (
     <Table>

@@ -1,17 +1,17 @@
 import { useMemo } from "react";
 import { type ColumnDef, createColumnHelper, useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
-import { Table, Tbody, Thead } from "~/components/table";
+import { Table, Tbody, Thead } from "~/components/atoms/table";
 
 /**
  * VetsTable
  */
-export interface VetsRowData {
+export type VetsRowData = {
   name: string;
   specialties: string;
-}
-interface VetsTableProps {
+};
+type VetsTableProps = {
   data: VetsRowData[];
-}
+};
 export function VetsTable({ data }: VetsTableProps) {
   const columnHelper = createColumnHelper<VetsRowData>();
   const columns = useMemo<ColumnDef<VetsRowData, string>[]>(() => [

@@ -1,14 +1,14 @@
 import { format } from "date-fns";
-import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { Button } from "./button";
-import { FormErrorMessage, FormGroup, FormInput, FormItem, FormLabel, FormSelect } from "./form";
-import { Table, Tbody, Thead } from "./table";
+import { useForm } from "react-hook-form";
+import { Button } from "~/components/atoms/button";
+import { FormErrorMessage, FormGroup, FormInput, FormItem, FormLabel, FormSelect } from "~/components/atoms/form";
+import { Table, Tbody, Thead } from "~/components/atoms/table";
 
 /**
  * PetsTable
  */
-interface PetsTableProps {
+type PetsTableProps = {
   data: {
     id: number;
     ownerId: number;
@@ -21,7 +21,7 @@ interface PetsTableProps {
       description: string;
     }[];
   }[];
-}
+};
 export function PetsTable({ data }: PetsTableProps) {
   return (
     <Table>
@@ -98,12 +98,12 @@ export function PetsTable({ data }: PetsTableProps) {
 /**
  * PetForm
  */
-export interface PetFormValues {
+export type PetFormValues = {
   petName: string;
   birthDate: string;
   petTypeId: string;
-}
-interface PetFormProps {
+};
+type PetFormProps = {
   ownerName: string;
   petTypes: {
     id: number;
@@ -116,7 +116,7 @@ interface PetFormProps {
   };
   submit: (data: PetFormValues) => void;
   type: "ADD" | "UPDATE";
-}
+};
 export function PetForm({ ownerName, petTypes, pet, submit, type }: PetFormProps) {
   const petValue = pet ?? {
     petName: "",
@@ -204,7 +204,7 @@ export function PetForm({ ownerName, petTypes, pet, submit, type }: PetFormProps
 /**
  * PetTable
  */
-interface PetTableProps {
+type PetTableProps = {
   pet: {
     id: number;
     name: string;
@@ -215,7 +215,7 @@ interface PetTableProps {
       id: number;
     };
   }
-}
+};
 export function PetTable({ pet }: PetTableProps) {
   return (
     <Table>

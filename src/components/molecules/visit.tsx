@@ -1,21 +1,21 @@
-import { useForm } from "react-hook-form";
 import { format } from "date-fns";
-import { FormErrorMessage, FormGroup, FormInput, FormItem, FormLabel } from "./form";
-import { Button } from "./button";
-import { type ColumnDef, createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { Table, Tbody } from "./table";
+import { useForm } from "react-hook-form";
+import { type ColumnDef, createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { Button } from "~/components/atoms/button";
+import { FormErrorMessage, FormGroup, FormInput, FormItem, FormLabel } from "~/components/atoms/form";
+import { Table, Tbody } from "~/components/atoms/table";
 
 /**
  * VisitForm
  */
-export interface VisitFormValues {
+export type VisitFormValues = {
   visitDate: string;
   description: string;
-}
-interface VisitFormProps {
+};
+type VisitFormProps = {
   submit: (data: VisitFormValues) => void;
-}
+};
 export function VisitForm({ submit }: VisitFormProps) {
   const {
     handleSubmit,
@@ -64,13 +64,13 @@ export function VisitForm({ submit }: VisitFormProps) {
 /**
  * VisitsTable
  */
-export interface VisitRowData {
+export type VisitRowData = {
   date: string;
   description: string;
-}
-interface VisitsTableProps {
+};
+type VisitsTableProps = {
   data: VisitRowData[];
-}
+};
 export function VisitsTable({ data }: VisitsTableProps) {
   const columnHelper = createColumnHelper<VisitRowData>();
   const columns = useMemo<ColumnDef<VisitRowData, string>[]>(() => [

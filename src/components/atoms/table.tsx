@@ -30,7 +30,7 @@ export function Thead({ children, ...rest }: TheadProps) {
   );
 }
 
-type TbodyProps = DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>
+type TbodyProps = DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
 export function Tbody({ children, ...rest }: TbodyProps) {
   return (
     <tbody className="

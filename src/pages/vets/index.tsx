@@ -1,25 +1,19 @@
 import type { GetServerSidePropsContext, NextPage } from "next";
-import { appRouter } from "~/server/api/root";
-import { CommonMeta, Page } from "~/components/common";
-import { VetsTable } from "~/components/vets";
+import type { ComponentProps } from "react";
+import { CommonMeta } from "~/components/templates/meta";
+import { Dom } from "~/components/pages/vets";
 import { createInnerTRPCContext } from "~/server/api/trpc";
+import { appRouter } from "~/server/api/root";
 
-type Props = {
-  tableData: Array<{
-    name: string;
-    specialties: string;
-  }>
-}
+type Props = ComponentProps<typeof Dom>;
 const Vets: NextPage<Props> = ({ tableData }) => {
   return (
-    <Page>
+    <>
       <CommonMeta />
-      <h2>Veterinarians</h2>
-      <VetsTable data={tableData} />
-    </Page>
+      <Dom tableData={tableData} />
+    </>
   );
 };
-
 export default Vets;
 
 export async function getServerSideProps(_ctx: GetServerSidePropsContext) {
