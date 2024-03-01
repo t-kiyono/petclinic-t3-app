@@ -26,7 +26,7 @@ const client = z.object({
 const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
-  NEXT_PUBLIC_CDN: process.env.NEXT_PUBLIC_CDN ?? "https://petclinic-cdn.ultimania.net",
+  NEXT_PUBLIC_CDN: process.env.NEXT_PUBLIC_CDN ?? "https://petclinic.blob.core.windows.net",
 };
 
 // Don't touch the part below
