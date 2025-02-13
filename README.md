@@ -6,7 +6,7 @@
 
 ## Demo
 
-https://petclinic-t3.azurewebsites.net/
+https://petclinic-static.ultimania.net
 
 ## Setup
 
